@@ -2,15 +2,23 @@ import React, { useRef, useState } from "react";
 import FloorPlanImageSlider from "./FloorPlanImageSlider";
 import FloorPlanNavigator from "./FloorPlanNavigator";
 import FloorPlanInfoSlider from "./FloorPlanInfoSlider";
+import { useLocation } from "react-router-dom";
+import { data } from "../../../../../data/floorData";
 const FloorPlanT3 = () => {
+  const floorData = data.find((x) => x.template == 3);
+
   const [selected, setSelected] = useState(0);
   const sliderRef = useRef();
   const sliderRef2 = useRef();
   const sliderRef3 = useRef();
+  const location = useLocation();
   return (
     <>
       <div className="font-bold text-big md:text-huge uppercase text-center  drop-shadow-2xl pb-6 text-white">
-        Floor Plan
+        {
+          floorData.title.find((x) => x.lng == location.pathname.substring(1))
+            ?.value
+        }
       </div>
       <div className="lg:grid lg:grid-cols-12 my-12">
         <div className="col-span-8 bg-secondary hidden lg:block lg:relative">

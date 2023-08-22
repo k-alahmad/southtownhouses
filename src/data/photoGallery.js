@@ -40,51 +40,57 @@ import A3 from "../assets/images/amenities/3.webp";
 import A4 from "../assets/images/amenities/4.webp";
 import A5 from "../assets/images/amenities/5.webp";
 export const data = {
-	template: 2,
-	navBtns: [
-		{
-			type: [
-				{ lng: "ar", value: "Interiors" },
-				{ lng: "en", value: "Interiors" },
-				{ lng: "fa", value: "Interiors" },
-				{ lng: "ru", value: "интерьеры" },
-			],
-			imgs: [
-				I1,
-				I2,
-				I3,
-				I4,
-				I5,
-				I6,
-				I7,
-				I8,
-				I9,
-				I10,
-				I11,
-				I12,
-				I13,
-				I14,
-				I15,
-				I16,
-			],
-		},
-		{
-			type: [
-				{ lng: "ar", value: "Exteriors" },
-				{ lng: "en", value: "Exteriors" },
-				{ lng: "fa", value: "Exteriors" },
-				{ lng: "ru", value: "Экстерьеры" },
-			],
-			imgs: [E1, E2, E3, E4, E5, E6, E7, E8, E9, E10, E11, E12, E13, E14, E15],
-		},
-		{
-			type: [
-				{ lng: "ar", value: "Amenities" },
-				{ lng: "en", value: "Amenities" },
-				{ lng: "fa", value: "Amenities" },
-				{ lng: "ru", value: "Удобства" },
-			],
-			imgs: [A1, A2, A3, A4, A5],
-		},
-	],
+  template: 2,
+  title: [
+    { lng: "ar", value: "Photo Gallery" },
+    { lng: "en", value: "Photo Gallery" },
+    { lng: "fa", value: "Photo Gallery" },
+    { lng: "ru", value: "Фотогалерея" },
+  ],
+  navBtns: [
+    {
+      type: [
+        { lng: "ar", value: "Interiors" },
+        { lng: "en", value: "Interiors" },
+        { lng: "fa", value: "Interiors" },
+        { lng: "ru", value: "интерьеры" },
+      ],
+      imgs: [
+        I1,
+        I2,
+        I3,
+        I4,
+        I5,
+        I6,
+        I7,
+        I8,
+        I9,
+        I10,
+        I11,
+        I12,
+        I13,
+        I14,
+        I15,
+        I16,
+      ],
+    },
+    {
+      type: [
+        { lng: "ar", value: "Exteriors" },
+        { lng: "en", value: "Exteriors" },
+        { lng: "fa", value: "Exteriors" },
+        { lng: "ru", value: "Экстерьеры" },
+      ],
+      imgs: [E1, E2, E3, E4, E5, E6, E7, E8, E9, E10, E11, E12, E13, E14, E15],
+    },
+    {
+      type: [
+        { lng: "ar", value: "Amenities" },
+        { lng: "en", value: "Amenities" },
+        { lng: "fa", value: "Amenities" },
+        { lng: "ru", value: "Удобства" },
+      ],
+      imgs: [A1, A2, A3, A4, A5],
+    },
+  ],
 };

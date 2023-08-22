@@ -41,7 +41,9 @@ export default function Modal() {
               dispatch(hideModal());
             }}
             className={`cursor-pointer font-bold self-center text-black hover:scale-125 hover:rotate-180 absolute ${
-              i18n.language == "en" ? "right-5" : "left-5"
+              i18n.language == "ar" || i18n.language == "fa"
+                ? "left-5"
+                : "right-5"
             }  top-2 sm:max-md:top-8 md:top-3 transition-all duration-300 z-30`}
           >
             <MdClose className="text-bigger sm:text-huge" />

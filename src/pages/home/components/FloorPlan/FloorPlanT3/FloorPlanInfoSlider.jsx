@@ -18,7 +18,7 @@ const FloorPlanInfoSlider = ({ sliderRef, selected }) => {
     (d) => d.template == systemSettings.brochure.template
   );
   const floorData = data.find((d) => d.template == 3);
-  const { i18n } = useTranslation();
+  const { i18n, t } = useTranslation();
   const dispatch = useDispatch();
   const registerState = useSelector(selectRegisterState);
   const location = useLocation();
@@ -80,7 +80,7 @@ const FloorPlanInfoSlider = ({ sliderRef, selected }) => {
                   }}
                 >
                   <FaDownload className="text-med" />
-                  <p className="text-small px-2">Download Brochure</p>
+                  <p className="text-small px-2">{t("brochurDownload")}</p>
                 </button>
               </div>
             </div>
