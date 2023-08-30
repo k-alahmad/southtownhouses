@@ -12,6 +12,7 @@ import {
   counterIsFull,
   selectDownloadState,
   selectRegisterState,
+  selectListRegisterState,
 } from "../../../redux/modal.slice";
 import { useTranslation } from "react-i18next";
 import { systemSettings } from "../../../settings";
@@ -23,23 +24,29 @@ const CustomInput = ({
   id,
   value,
   onChange,
+  errorMessage,
+  error,
 }) => {
   return (
-    <div className="border-b-[1px] border-primary px-4 py-3 flex">
-      {icon}
-      <input
-        type={type}
-        className="bg-transparent px-2 w-full outline-none"
-        name={name}
-        onChange={onChange}
-        placeholder={placeholder}
-        id={id}
-        value={value}
-      />
+    <div className="py-3 px-4">
+      <div className="border-b-[1px] border-primary  flex">
+        {icon}
+        <input
+          type={type}
+          className="bg-transparent px-2 w-full outline-none"
+          name={name}
+          onChange={onChange}
+          placeholder={placeholder}
+          id={id}
+          value={value}
+        />
+      </div>
+      {error && (
+        <p className="text-red-600 text-tiny font-semibold">{errorMessage}</p>
+      )}
     </div>
   );
 };
-
 const RegisterForm = () => {
   const brochure = brochureData.find(
     (d) => d.template == systemSettings.brochure.template
@@ -48,11 +55,14 @@ const RegisterForm = () => {
   const [email, setEmail] = useState("");
   const [fullName, setFullName] = useState("");
   const [phone, setPhone] = useState("");
+  const [emailError, setEmailError] = useState(false);
+  const [phoneError, setPhoneError] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const form = useRef();
   const downloadState = useSelector(selectDownloadState);
   const registerState = useSelector(selectRegisterState);
+  const listRegister = useSelector(selectListRegisterState);
 
   const sendEmail = (e) => {
     e.preventDefault();
@@ -75,28 +85,42 @@ const RegisterForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     let formData = new FormData(form.current);
+    console.log(listRegister);
+
     try {
-      const response = await fetch(
-        "https://hooks.zapier.com/hooks/catch/12792925/39sj2ca/",
-        {
+      let sameEmail = listRegister.find((element) => {
+        return element.email == form.current.email.value;
+      });
+      let samePhone = listRegister.find((element) => {
+        return element.phone == form.current.phone.value;
+      });
+      if (!sameEmail && !samePhone) {
+        const response = await fetch(import.meta.env.VITE_ZAPPIER_URL, {
           method: "POST",
           body: formData,
           "Content-Type": "multipart/form-data",
+        });
+        const result = response.json();
+        console.log("Success:", result);
+        sendEmail(e);
+        if (downloadState) {
+          let alink = document.createElement("a");
+          alink.href = brochure.file;
+          alink.download = "BrochurePdf.pdf";
+          alink.click();
         }
-      );
-      const result = response.json();
-      console.log("Success:", result);
-      sendEmail(e);
-      if (downloadState) {
-        let alink = document.createElement("a");
-        alink.href = brochure.file;
-        alink.download = "BrochurePdf.pdf";
-        alink.click();
+        dispatch(
+          register({
+            email: form.current.email.value,
+            phoneNo: form.current.phone.value,
+          })
+        );
+        dispatch(counterIsFull());
+        dispatch(hideModal());
+        navigate("/thankyou");
+      } else {
+        alert("We Already Have a registration with this data");
       }
-      dispatch(register());
-      dispatch(counterIsFull());
-      dispatch(hideModal());
-      navigate("/thankyou");
     } catch (error) {
       console.error("Error here:", error);
     }
@@ -125,7 +149,22 @@ const RegisterForm = () => {
         name="email"
         id="email"
         value={email}
-        onChange={(event) => setEmail(event.target.value)}
+        onChange={(event) => {
+          setEmail(event.target.value);
+          let EmailRegExp;
+          EmailRegExp = new RegExp(
+            /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+          ).test(event.target.value);
+
+          console.log(emailError);
+          if (!EmailRegExp) {
+            setEmailError(true);
+          } else {
+            setEmailError(false);
+          }
+        }}
+        error={emailError}
+        errorMessage={"please enter a valid email"}
       />
       <input
         type="text"
@@ -153,15 +192,19 @@ const RegisterForm = () => {
         inputStyle={{
           direction: "ltr",
         }}
+        isValid={(value, country) => {
+          if (value.match(/^\+?[1-9][0-9]{7,14}$/)) {
+            setPhoneError(false);
+            return true;
+          } else {
+            setPhoneError(true);
+            return "Invalid Phone Number";
+          }
+        }}
       />
       <button
         className={`${"bg-primary"} text-white text-small w-full py-4 disabled:bg-fourth/60`}
-        // disabled={
-        // 	email.replace(/ /g, "") == "" ||
-        // 	fullName.replace(/ /g, "") == "" ||
-        // 	phone.length < 12
-        // }
-        disabled={true}
+        disabled={emailError || fullName.replace(/ /g, "") == "" || phoneError}
       >
         {t("register")}
       </button>
