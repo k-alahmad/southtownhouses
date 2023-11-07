@@ -85,7 +85,6 @@ const RegisterForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     let formData = new FormData(form.current);
-    console.log(listRegister);
 
     try {
       let sameEmail = listRegister.find((element) => {
